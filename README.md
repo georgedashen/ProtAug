@@ -26,3 +26,10 @@ python meta-classification.py
 python evaluate.py
 ```
 
+## Quality Assess
+
+```bash
+python count_diff.py
+python cal_rep_ratio.py
+python cal_shannon.py
+```
