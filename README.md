@@ -2,7 +2,6 @@
 ProtAug: Utilizing Self-Supervised Protein Language Models for Effective Protein Sequence Augmentation
 
 ## Requirements
-```
 ` python=3.12
 ` pandas
 ` numpy
@@ -10,7 +9,6 @@ ProtAug: Utilizing Self-Supervised Protein Language Models for Effective Protein
 ` tensorflow=2.19.0
 ` transformers
 ` ktrain
-```
 
 ## Models
 ` DistilProtBert: yarongef/DistilProtBert
