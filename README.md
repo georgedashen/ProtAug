@@ -11,9 +11,9 @@ ProtAug: Utilizing Self-Supervised Protein Language Models for Effective Protein
 * ktrain
 
 ## Models
-* DistilProtBert: yarongef/DistilProtBert
-* prot_bert_bfd: Rostlab/prot_bert_bfd
-* Esm2: facebook/esm2_t33_650M_UR50D
+* **DistilProtBert**: yarongef/DistilProtBert
+* **prot_bert_bfd**: Rostlab/prot_bert_bfd
+* **Esm2**: facebook/esm2_t33_650M_UR50D
 
 ## Run
 
