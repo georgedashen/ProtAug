@@ -2,6 +2,8 @@
 ProtAug: Utilizing Self-Supervised Protein Language Models for Effective Protein Sequence Augmentation
 
 ## Requirements
+Under CUDA 12.8 with NVIDIA RTX3090 GPU with 24G GPU
+
 * python=3.12
 * pandas
 * numpy
