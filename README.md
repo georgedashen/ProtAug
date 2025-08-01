@@ -7,6 +7,7 @@ ProtAug: Utilizing Self-Supervised Protein Language Models for Effective Protein
 * numpy
 * tqdm
 * tensorflow=2.19.0
+* pytorch=2.7.1
 * transformers
 * ktrain
 
