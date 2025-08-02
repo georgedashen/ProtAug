@@ -70,6 +70,14 @@ python cal_shannon.py data/mf-augmented_training_Esm2_MLM_rho0.55.csv
 
 
 ### Training and Evaluation
+Finetuning (remove `--test` to run all data)
+```bash
+CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method noaug --batch 4 --lr 1e-4 --test
+CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method duplicate --batch 4 --lr 1e-4 --test
+CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method aug --augfile  _Esm2_MLM_rho0.55 --batch 4 --lr 1e-4 --test
+```
+
+Next:
 ```bash
 python extract-embeddings.py
 python meta-classification.py
