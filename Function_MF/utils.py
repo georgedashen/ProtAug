@@ -1,9 +1,12 @@
-#import ktrain
-#from ktrain import text
 import os
 import numpy as np
 from tqdm import tqdm
-#import tensorflow as tf
+
+os.environ["TF_USE_LEGACY_KERAS"]= '1' #use legacy keras to avoid error in lora layer
+
+import ktrain
+from ktrain import text
+import tensorflow as tf
 
 #### LOAD ONTOLOGY ####
 def get_ancestors(ontology, term):

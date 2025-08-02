@@ -32,7 +32,7 @@ parser.add_argument('--resume', action='store_true', default=False, help='whethe
 args = parser.parse_args()
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(args.gpu.split(','))
-os.environ["TF_USE_LEGACY_KERAS"]= '1' #use legacy keras to avoid error in lora layer
+os.environ["TF_USE_LEGACY_KERAS"]= '1'
 
 import ktrain
 from ktrain import text
