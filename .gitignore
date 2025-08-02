@@ -1,0 +1,8 @@
+data/
+Models/
+Function_MF/data/
+Function_MF/augmentation_time.txt
+Function_MF/genFasta.py
+Function_MF/replaceTokens.py
+Function_MF/PAM1.txt
+Function_MF/PAM250.txt
