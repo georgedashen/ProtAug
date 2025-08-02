@@ -4,6 +4,7 @@ Function_MF/data/
 Function_MF/weights
 Function_MF/fix_weights/
 Function_MF/seqSlice_time.txt
+Function_MF/embedding_time.txt
 Function_MF/augmentation_time.txt
 Function_MF/finetuning_time.txt
 Function_MF/genFasta.py
