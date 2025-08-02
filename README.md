@@ -77,9 +77,16 @@ CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method duplicate
 CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method aug --augfile  _Esm2_MLM_rho0.55 --batch 4 --lr 1e-4 --test
 ```
 
-Next:
+Next extract embeddings:
 ```bash
-python extract-embeddings.py
-python meta-classification.py
-python evaluate.py
+CUDA_VISIBLE_DEVICES=0 python extract-embeddings.py --model_name Esm2 --model_path fix_weights/Esm2-finetune-noaug/test --noaug --output Esm2-fix-noaug --test
+CUDA_VISIBLE_DEVICES=0 python extract-embeddings.py --model_name Esm2 --model_path fix_weights/Esm2-finetune-duplicate/test --duplicate --output Esm2-fix-duplicate --test
+CUDA_VISIBLE_DEVICES=0 python extract-embeddings.py --model_name Esm2 --model_path fix_weights/Esm2-finetune-aug_Esm2_MLM_rho0.55/test --augfile _Esm2_MLM_rho0.55 --output Esm2-fix-Esm2_MLM_rho0.55 --test
+```
+
+Meta-training and final prediction:
+```bash
+python meta-classifier.py --embedding Esm2-fix-Esm2_MLM_rho0.55 --test
+python meta-classifier.py --embedding Esm2-fix-Esm2_MLM_rho0.55 --only_aug --test
+python meta-classifier.py --embedding Esm2-fix-Esm2_MLM_rho0.55 --test
 ```
