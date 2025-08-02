@@ -71,6 +71,7 @@ python cal_shannon.py data/mf-augmented_training_Esm2_MLM_rho0.55.csv
 
 ### Training and Evaluation
 **Finetuning (remove `--test` to run all data)**
+
 The following three are for no augmentation, using duplicate data (0% variation), and combining original and augmented data:
 ```bash
 CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method noaug --batch 4 --lr 1e-4 --test
@@ -79,6 +80,7 @@ CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method aug --aug
 ```
 
 **Next extract embeddings:**
+
 The following three are for no augmentation, using only augmented data, and combining original and augmented data:
 ```bash
 CUDA_VISIBLE_DEVICES=0 python extract-embeddings.py --model_name Esm2 --model_path fix_weights/Esm2-finetune-noaug/test --noaug --output Esm2-fix-noaug --test
@@ -87,6 +89,7 @@ CUDA_VISIBLE_DEVICES=0 python extract-embeddings.py --model_name Esm2 --model_pa
 ```
 
 **Meta-training and final prediction:**
+
 The following three are for no augmentation, using only augmented data, and combining original and augmented data:
 ```bash
 python meta-classifier.py --embedding Esm2-fix-Esm2_MLM_rho0.55 --noaug --test
