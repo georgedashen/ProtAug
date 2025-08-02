@@ -16,7 +16,7 @@ example_usage = 'CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 -
 example_usage = 'CUDA_VISIBLE_DEVICES=0 python fine-tuning-fix.py --model Esm2 --method aug --augfile  _Esm2_MLM_rho0.55 --batch 4 --lr 1e-4'
 parser = argparse.ArgumentParser(description='finetuning pLM with frozen-backbone settings', epilog=example_usage)
 parser.add_argument('--aspect', type=str, default='mf', choices=['bp','mf','cc'])
-parser.add_argument('--model', type=str, default='prot_bert_bfd')
+parser.add_argument('--model', type=str, default='prot_bert_bfd', choices=['DistilProtBert','prot_bert_bfd','Esm2'], help='base model')
 parser.add_argument('--method', type=str, default='noaug', choices=['noaug','duplicate','aug'], help='noaug: no augmentation, duplicate: duplicate training data, aug: use augmentation')
 parser.add_argument('--augfile', type=str, default='', help='provide augmentation file, in the format of _42, _12345')
 parser.add_argument('--maxlen', type=int, default=500, help='max sequence len before truncating')
