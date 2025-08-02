@@ -1,5 +1,11 @@
 import argparse
 import os
+import pandas as pd
+import pickle
+import numpy as np
+from tqdm import tqdm
+import time
+from npy_append_array import NpyAppendArray
 
 example_usage = 'CUDA_VISIBLE_DEVICES=0 python extract-embeddings.py --model_name Esm2 --model_path fix_weights/Esm2-finetune-noaug/test --noaug --output Esm2-fix-noaug'
 example_usage = 'CUDA_VISIBLE_DEVICES=0 python extract-embeddings.py --model_name Esm2 --model_path fix_weights/Esm2-finetune-duplicate/test --duplicate --output Esm2-fix-duplicate'
@@ -27,13 +33,8 @@ os.environ["TF_USE_LEGACY_KERAS"]= "1"
 import ktrain
 from ktrain import text
 import tensorflow as tf
-import pandas as pd
-import pickle
-import numpy as np
-from tqdm import tqdm
 from transformers import *
-import time
-from npy_append_array import NpyAppendArray
+
 ext = compile(open('utils.py').read(), 'utils.py', 'exec')
 exec(ext)
 
@@ -55,7 +56,6 @@ df_test = pd.read_csv('data/mf-test.csv')
 if args.test:
     df_train = df_train[:10]
     df_val = df_val[:100]
-    df_test = df_test[:100]
 
 ontologies_names = df_val.columns[2:].values
 
@@ -78,7 +78,7 @@ X_test, y_test, positions_test = generate_data(df_test, subseq=args.maxlen, over
 ################ Training #####################
 if args.subset == 'full' or args.subset == 'train':
     model, tokenizer, ds = get_model(args.model_name, args.model_path, args.output, 'train', args.lora)
-    file_path = f'data/embedding/{args.output}/mf-X_train.npy'
+    file_path = f'data/embedding/{args.output}/X_train.npy'
     t0 = time.time()
     if args.batch == 1:
         get_embeddings_noBatch(X_train, model, tokenizer, file_path)
@@ -89,7 +89,7 @@ if args.subset == 'full' or args.subset == 'train':
 
 ################ Augmentation #####################
 if (args.subset == 'full' or args.subset == 'aug') and not args.noaug:
-    file_path = f'data/embedding/{args.output}/mf-X_aug{args.augfile}.npy'
+    file_path = f'data/embedding/{args.output}/X_aug{args.augfile}.npy'
     model, tokenizer, ds = get_model(args.model_name, args.model_path, args.output, 'aug', args.lora)
     t0 = time.time()
     if not args.noaug:
@@ -102,7 +102,7 @@ if (args.subset == 'full' or args.subset == 'aug') and not args.noaug:
 
 ################ Validation #####################
 if args.subset == 'full' or args.subset == 'val':
-    file_path = f'data/embedding/{args.output}/mf-X_val.npy'
+    file_path = f'data/embedding/{args.output}/X_val.npy'
     model, tokenizer, ds = get_model(args.model_name, args.model_path, args.output, 'val', args.lora)
     t0 = time.time()
     if args.batch == 1:
@@ -114,7 +114,7 @@ if args.subset == 'full' or args.subset == 'val':
 
 ################ Test #####################
 if args.subset == 'full' or args.subset == 'test':
-    file_path = f'data/embedding/{args.output}/mf-X_test.npy'
+    file_path = f'data/embedding/{args.output}/X_test.npy'
     model, tokenizer, ds = get_model(args.model_name, args.model_path, args.output, 'test', args.lora)
     t0 = time.time()
     if args.batch == 1:

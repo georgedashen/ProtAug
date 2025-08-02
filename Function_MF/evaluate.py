@@ -5,30 +5,31 @@ from sklearn.metrics import precision_recall_curve, auc
 from collections import Counter
 import math
 
-def evaluate(predictions, ground_truth):
-  y_ = np.concatenate([y_train, y_val, y_test])
-  annots = []
-  for i in y_:
-    actual = []
-    for j in range(len(i.tolist())):
-      if i[j] == 1:
-        actual.append(ontologies_names[j])
-    annots.append(actual)
+def evaluate(predictions, ground_truth, ic=None):
+  if ic is None:
+    y_ = np.concatenate([y_train, y_val, y_test])
+    annots = []
+    for i in y_:
+      actual = []
+      for j in range(len(i.tolist())):
+        if i[j] == 1:
+          actual.append(ontologies_names[j])
+      annots.append(actual)
 
-  cnt = Counter()
-  for x in annots:
-    cnt.update(x)
+    cnt = Counter()
+    for x in annots:
+      cnt.update(x)
 
-  ic = {}
+    ic = {}
 
-  for go_id, n in cnt.items():
-    if go_id in ontology:
-      parents = ontology[go_id]['parents']
-      if len(parents) == 0:
-        min_n = n
-      else:
-        min_n = min([cnt[x] for x in parents])
-      ic[go_id] = math.log(min_n / n, 2)
+    for go_id, n in cnt.items():
+      if go_id in ontology:
+        parents = ontology[go_id]['parents']
+        if len(parents) == 0:
+          min_n = n
+        else:
+          min_n = min([cnt[x] for x in parents])
+        ic[go_id] = math.log(min_n / n, 2)
 
   precisions = []
   recalls = []
@@ -111,7 +112,7 @@ def evaluate(predictions, ground_truth):
   sorted_index = np.argsort(recalls)
   recalls = recalls[sorted_index]
   precisions = precisions[sorted_index]
-  aupr = np.trapz(precisions, recalls)
+  aupr = np.trapezoid(precisions, recalls)
   print('AuPRC:', aupr)
 
   new_p = []
@@ -122,7 +123,7 @@ def evaluate(predictions, ground_truth):
       new_r.append(i/100)
       new_p.append(max(precisions[idx:]))
 
-  Iaupr = np.trapz(new_p, new_r)
+  Iaupr = np.trapezoid(new_p, new_r)
   print('IAuPRC:', Iaupr)
     
   perf = {'fmax':f1_max_value, 'threshold':f1_max_threshold, 'smin':smin, 'aupr':aupr, 'Iaupr':Iaupr}
@@ -236,7 +237,7 @@ def compute_metrics(p):
   sorted_index = np.argsort(recalls)
   recalls = recalls[sorted_index]
   precisions = precisions[sorted_index]
-  aupr = np.trapz(precisions, recalls)
+  aupr = np.trapezoid(precisions, recalls)
   print('AuPRC:', aupr)
 
   new_p = []
@@ -247,7 +248,7 @@ def compute_metrics(p):
       new_r.append(i/100)
       new_p.append(max(precisions[idx:]))
 
-  Iaupr = np.trapz(new_p, new_r)
+  Iaupr = np.trapezoid(new_p, new_r)
   print('IAuPRC:', Iaupr)
     
   perf = {'fmax':f1_max_value, 'threshold':f1_max_threshold, 'smin':smin, 'aupr':aupr, 'Iaupr':Iaupr}

@@ -4,14 +4,14 @@ import numpy as np
 import random
 from tqdm import tqdm
 import time
-import ktrain
-from ktrain import text
-from transformers import *
-import tensorflow as tf
 import os
+import pickle
 import csv
 
-example_usage = 'python meta-classifier.py --embedding original'
+example_usage = 'python meta-classifier.py --embedding Esm2-fix-noaug --noaug --test'
+example_usage = 'python meta-classifier.py --embedding Esm2-fix-duplicate --duplicate --test'
+example_usage = 'python meta-classifier.py --embedding Esm2-fix-Esm2_MLM_rho0.55 --only_aug --test'
+example_usage = 'python meta-classifier.py --embedding Esm2-fix-Esm2_MLM_rho0.55 --test'
 parser = argparse.ArgumentParser(description='extract embeddings from pLM', epilog=example_usage)
 parser.add_argument('--aspect', type=str, default='mf', choices=['bp','mf','cc'])
 parser.add_argument('--embedding', type=str, default='original_PAM1', help='which folder to load embeddings')
@@ -24,6 +24,7 @@ parser.add_argument('--maxlen', type=int, default=500, help='max sequence len be
 parser.add_argument('--overlap', type=int, default=250, help='overlap sequence')
 parser.add_argument('--seed', type=int, default=42)
 parser.add_argument('--save', type=int, default=1)
+parser.add_argument('--ic', type=str, default='mf_ic.pkl')
 parser.add_argument('--test', action='store_true', default=False, help='only load a small set')
 args = parser.parse_args()
 
@@ -31,6 +32,12 @@ args.save = bool(args.save)
 exec(open('utils.py').read())
 exec(open('evaluate.py').read())
 MAX_LEN = args.maxlen
+
+os.environ["TF_USE_LEGACY_KERAS"]= "1"
+import ktrain
+from ktrain import text
+import tensorflow as tf
+from transformers import *
 
 #seed = 42
 np.random.seed(args.seed)
@@ -47,30 +54,26 @@ if args.duplicate:
 # Load data
 df_train = pd.read_csv('data/mf-training.csv')
 df_val = pd.read_csv('data/mf-validation.csv')
-if not args.noaug:
-    data_augmentation = pd.read_csv('data/mf-augmented_training.csv')
 df_test = pd.read_csv('data/mf-test.csv')
 ontologies_names = df_val.columns[2:].values
 
 if args.test:
     df_train = df_train[:10]
-    df_val = df_val[:10]
-    if not args.noaug:
-        data_augmentation = data_augmentation[:10]
+    df_val = df_val[:100]
 
 # Load ontology
-ontology = generate_ontology('../go.obo', specific_space=True, name_specific_space='molecular_function')
+ontology = generate_ontology('go.obo', specific_space=True, name_specific_space='molecular_function')
 
 # Generate slices from sliding window technique
 __, y_train, positions_train = generate_data(df_train, subseq=500, overlap=250)
 __, y_val, positions_val = generate_data(df_val, subseq=500, overlap=250)
 __, y_test, positions_test = generate_data(df_test, subseq=500, overlap=250)
 if not args.noaug:
-    __, y_aug, positions_aug = generate_data(data_augmentation, subseq=500, overlap=250)
+    y_aug, positions_aug = y_train, positions_train
 
-X_train = np.load(f'data/embedding/{args.embedding}/mf-X_train.npy') #make sure if it is augmented
-X_val = np.load(f'data/embedding/{args.embedding}/mf-X_val.npy')
-X_test = np.load(f'data/embedding/{args.embedding}/mf-X_test.npy')
+X_train = np.load(f'data/embedding/{args.embedding}/X_train.npy') #make sure if it is augmented
+X_val = np.load(f'data/embedding/{args.embedding}/X_val.npy')
+X_test = np.load(f'data/embedding/{args.embedding}/X_test.npy')
 if args.test:
     X_train = X_train[:len(y_train),:]
     X_val = X_val[:len(y_val)]
@@ -120,16 +123,21 @@ model.fit(X_train, y_train, epochs=1000, batch_size=32, validation_data=(X_val, 
 training_time = time.time() - t0
 print(f'Training time: {training_time}')
 
+if args.ic:
+    ic = pickle.load(open(args.ic,'rb'))
+else:
+    ic = None
+
 if args.testset == 'test':
     pred = model.predict(X_test)
-    perf = evaluate(pred, y_test)
+    perf = evaluate(pred, y_test, ic)
 elif args.testset == 'train':
     pred = model.predict(X_train)
-    perf = evaluate(pred, y_train)
+    perf = evaluate(pred, y_train, ic)
     args.save = False
 else:
     pred = model.predict(X_val)
-    perf = evaluate(pred, y_val)
+    perf = evaluate(pred, y_val, ic)
     args.save = False
     
 if args.save:

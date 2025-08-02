@@ -240,6 +240,10 @@ def get_model(model_name, model_path, output, dataset, lora=False):
 def get_embeddings(X, model, tokenizer, file_path, gpu=0):
     os.system(f'mkdir -p {os.path.dirname(file_path)}') #create filepath if not exists
     batch_num = len(X)
+    if os.path.exists(file_path):
+        print(f'File {file_path} already exists. Remove existing file.')
+        os.remove(file_path)
+
     with NpyAppendArray(file_path) as npaa:
         for i in tqdm(range(batch_num)):
             with tf.device(f'/device:GPU:{gpu}'):
