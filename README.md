@@ -55,7 +55,7 @@ python ProtGPT2generator.py --model ProtGPT2 --rho 0.55 --test
 ```
 
 Split batches and merge: (remove `--test` to run all data)
-```
+```bash
 python ProtGPT2generator.py --model ProtGPT2 --rho 0.55 --num_chunk 5 --chunk_id [from 0-4] --test
 python df_merge.py ProtGPT2_rho0.55 5
 ```
