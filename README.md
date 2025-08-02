@@ -63,8 +63,8 @@ python df_merge.py ProtGPT2_rho0.55 5
 ## Quality Assess
 
 ```bash
-python cal_rep_ratio.py
-python cal_shannon.py
+python cal_rep_ratio.py data/mf-augmented_training_Esm2_MLM_rho0.55.csv
+python cal_shannon.py data/mf-augmented_training_Esm2_MLM_rho0.55.csv
 ```
 
 ### Training and Evaluation
