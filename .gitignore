@@ -1,7 +1,10 @@
 data/
 Models/
 Function_MF/data/
+Function_MF/fix_weights/
+Function_MF/seqSlice_time.txt
 Function_MF/augmentation_time.txt
+Function_MF/finetuning_time.txt
 Function_MF/genFasta.py
 Function_MF/replaceTokens.py
 Function_MF/PAM1.txt
