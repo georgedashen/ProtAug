@@ -142,11 +142,11 @@ else:
     
 if args.save:
     os.system(f'mkdir -p predictions')
-    np.save(f'predictions/mf-temprot-{args.embedding}.npy', pred)
     flag = 'noaug' if args.noaug else 'aug'
     flag = 'duplicate' if args.duplicate else flag
     flag = 'only_aug' if args.only_aug else flag
-    fn = f'predictions/mf-temprot-{args.embedding}.csv'
+    np.save(f'predictions/mf-{args.embedding}.npy', pred)
+    fn = f'predictions/mf-{flag}-{args.embedding}.csv'
     if not os.path.exists(fn):
         with open(fn, 'w') as f:
             csv.writer(f).writerow(['fmax', 'threshold', 'smin', 'aupr', 'Iaupr', 'training_time', 'seed', 'aug', 'augfile'])
