@@ -60,7 +60,7 @@ python ProtGPT2generator.py --model ProtGPT2 --rho 0.55 --num_chunk 5 --chunk_id
 python df_merge.py ProtGPT2_rho0.55 5
 ```
 
-## Quality Assess
+### Quality Assess
 Here we provide the code for repetition and shannon diversity calculation:
 
 ```bash
