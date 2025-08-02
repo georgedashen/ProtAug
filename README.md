@@ -37,7 +37,7 @@ python count_diff.py --d1 data/mf-training.csv --d2 data/mf-augmented_training_R
 ```
 
 ### ProtAug_Esm
-Single batch: (remove `--test` to run all data)
+Single batch for 55% variation: (remove `--test` to run all data)
 ```bash
 python MLMgenerator.py --rho 0.55 --test
 ```
@@ -49,7 +49,7 @@ python df_merge.py Esm2_MLM_rho0.55 5
 ```
 
 ### ProtAug_GPT
-Single batch: (remove `--test` to run all data)
+Single batch for 55% variation: (remove `--test` to run all data)
 ```bash
 python ProtGPT2generator.py --model ProtGPT2 --rho 0.55 --test
 ```
