@@ -1,3 +1,7 @@
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..")))
+from protaug_paths import resolve_model
+
 import argparse
 import os
 import pandas as pd
@@ -40,7 +44,7 @@ exec(ext)
 
 os.makedirs(f'data/embedding/{args.output}', exist_ok=True)
 MAX_LEN = args.maxlen
-args.model_name = f'../Models/{args.model_name}'
+args.model_name = resolve_model(args.model_name)
 
 mp = os.listdir(os.path.dirname(args.model_path))
 if len(mp)==1:

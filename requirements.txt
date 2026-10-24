@@ -1,0 +1,12 @@
+pandas
+numpy
+tqdm
+scipy
+scikit-learn
+biopython
+npy-append-array
+matplotlib
+tensorflow==2.19.0
+torch==2.7.1
+transformers
+ktrain

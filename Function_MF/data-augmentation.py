@@ -86,7 +86,7 @@ for key in df_train.columns.values.tolist():
   generated_df[key] = []
 generated_df = pd.DataFrame(generated_df)
 
-generated_df = generated_df.append(generate_augmentation(df_train))
+generated_df = pd.concat([generated_df, generate_augmentation(df_train)], ignore_index=True)
 generated_df.iloc[:,0] = 0.0
 generated_df = generated_df.iloc[:,:-1] #remove last columns
 

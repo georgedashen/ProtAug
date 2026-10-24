@@ -1,0 +1,19 @@
+name: protaug
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - pandas
+      - numpy
+      - tqdm
+      - scipy
+      - scikit-learn
+      - biopython
+      - npy-append-array
+      - matplotlib
+      - tensorflow==2.19.0
+      - torch==2.7.1
+      - transformers
+      - ktrain

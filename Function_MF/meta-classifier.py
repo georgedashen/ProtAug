@@ -23,21 +23,21 @@ parser.add_argument('--testset', type=str, default='test', help='which set of da
 parser.add_argument('--maxlen', type=int, default=500, help='max sequence len before truncating')
 parser.add_argument('--overlap', type=int, default=250, help='overlap sequence')
 parser.add_argument('--seed', type=int, default=42)
+parser.add_argument('--gpu_mem', type=int, default=0, help='per-process GPU memory cap in MiB (0 = grow on demand)')
 parser.add_argument('--save', type=int, default=1)
 parser.add_argument('--ic', type=str, default='mf_ic.pkl')
 parser.add_argument('--test', action='store_true', default=False, help='only load a small set')
 args = parser.parse_args()
 
+os.environ["TF_USE_LEGACY_KERAS"]= "1"
+os.environ.setdefault('TF_FORCE_GPU_ALLOW_GROWTH', 'true')
+
 args.save = bool(args.save)
 exec(open('utils.py').read())
 exec(open('evaluate.py').read())
-MAX_LEN = args.maxlen
-
-os.environ["TF_USE_LEGACY_KERAS"]= "1"
-import ktrain
-from ktrain import text
-import tensorflow as tf
+configure_tensorflow_gpu(args.gpu_mem if args.gpu_mem > 0 else None)
 from transformers import *
+MAX_LEN = args.maxlen
 
 #seed = 42
 np.random.seed(args.seed)

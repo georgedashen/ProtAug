@@ -3,10 +3,25 @@ import numpy as np
 from tqdm import tqdm
 
 os.environ["TF_USE_LEGACY_KERAS"]= '1' #use legacy keras to avoid error in lora layer
+os.environ.setdefault('TF_FORCE_GPU_ALLOW_GROWTH', 'true')
 
 import ktrain
 from ktrain import text
 import tensorflow as tf
+
+def configure_tensorflow_gpu(memory_limit_mb=None):
+    """Avoid reserving all GPU memory so multiple jobs can share one card."""
+    gpus = tf.config.list_physical_devices('GPU')
+    if not gpus:
+        return
+    if memory_limit_mb is not None:
+        tf.config.set_logical_device_configuration(
+            gpus[0],
+            [tf.config.LogicalDeviceConfiguration(memory_limit=int(memory_limit_mb))],
+        )
+    else:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
 
 #### LOAD ONTOLOGY ####
 def get_ancestors(ontology, term):

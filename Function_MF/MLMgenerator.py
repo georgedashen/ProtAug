@@ -1,4 +1,8 @@
 # Step 1: Import libraries
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..")))
+from protaug_paths import resolve_model
+
 import argparse
 import numpy as np
 import pandas as pd
@@ -60,7 +64,7 @@ if args.num_chunk > 1:
 Nseq = len(df_train)
 
 # Step 2: Load the BERT model and tokenizer
-model_name = f'../Models/{args.model}'
+model_name = resolve_model(args.model)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = TFAutoModelForMaskedLM.from_pretrained(model_name)
 if tokenizer.sep_token == None: #Esm2

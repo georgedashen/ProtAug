@@ -2,6 +2,10 @@
 # 1: ktrain/text/preprocessor.py (bypass length checking)
 # 2: ktrain/lroptimize/triangular.py (np.Inf -> np.inf)
 
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..")))
+from protaug_paths import resolve_model
+
 import argparse
 import os
 import pandas as pd
@@ -43,7 +47,7 @@ args.batch = int(args.batch / len(args.gpu.split(',')))
 
 exec(open('utils.py').read())
 MAX_LEN = args.maxlen
-model_name = f'../Models/{args.model}'
+model_name = resolve_model(args.model)
 
 noaug = False
 if args.method == 'noaug' or args.method == 'duplicate':
